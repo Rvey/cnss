@@ -1,11 +1,36 @@
-import {Field, FieldArray, Form, Formik} from 'formik';
+import {Field, Form, Formik} from 'formik';
 import React from 'react';
 
 import {useNavigate} from 'react-router-dom';
+import CustomSelect from './CustomSelect';
 
 const AddPatientFile = (setIsOpen: any) => {
     let navigate = useNavigate();
 
+    const languageOptions = [
+        {
+            label: "Chinese",
+            value: "zh-CN"
+        },
+        {
+            label: "English (US)",
+            value: "en-US"
+        },
+        {
+            label: "English (GB)",
+            value: "en-GB"
+        },
+        {
+            label: "French",
+            value: "fr-FR"
+        },
+        {
+            label: "Spanish",
+            value: "es-ES"
+        }
+    ];
+    // @ts-ignore
+    // @ts-ignore
     return (
         <Formik
             initialValues={{
@@ -15,10 +40,10 @@ const AddPatientFile = (setIsOpen: any) => {
                 phone: '',
                 address: '',
                 city: '',
-                medicine: '',
+                medicine: [],
                 email: '',
                 file: '',
-                friends: []
+                multiLanguages: []
             }}
             onSubmit={(values: any) => {
                 // let data = new FormData();
@@ -33,7 +58,7 @@ const AddPatientFile = (setIsOpen: any) => {
 
             }}
         >
-            {({errors, touched, setFieldValue , values}: any) => (
+            {({errors, touched, setFieldValue, values}: any) => (
                 <Form>
                     {/* {error && (
                         <div className="py-2 px-3 bg-red-500 w-full text-white rounded-md flex justify-between">
@@ -94,11 +119,20 @@ const AddPatientFile = (setIsOpen: any) => {
                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                             medicine
                         </label>
+                        {/*<Field*/}
+                        {/*    type="text"*/}
+                        {/*    id="medicine"*/}
+                        {/*    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"*/}
+                        {/*    name="medicine"*/}
+                        {/*/>*/}
+
                         <Field
-                            type="text"
-                            id="medicine"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            name="medicine"
+                            className="custom-select"
+                            name="multiLanguages"
+                            options={languageOptions}
+                            component={CustomSelect}
+                            placeholder="Select Medicine"
+                            isMulti={true}
                         />
                     </div>
                     <div className="mt-4">
@@ -129,30 +163,7 @@ const AddPatientFile = (setIsOpen: any) => {
                             }}
                         />
                     </div>
-                    <FieldArray
-                        name="friends"
-                        render={arrayHelpers => (
-                            <div>
-                                {values.friends.map((friend, index) => (
-                                    <div key={index}>
-                                        {/** both these conventions do the same */}
-                                        <Field name={`friends[${index}].name`} />
-                                        <Field name={`friends.${index}.age`} />
 
-                                        <button type="button" onClick={() => arrayHelpers.remove(index)}>
-                                            -
-                                        </button>
-                                    </div>
-                                ))}
-                                <button
-                                    type="button"
-                                    onClick={() => arrayHelpers.push({ name: '', age: '' })}
-                                >
-                                    +
-                                </button>
-                            </div>
-                        )}
-                    />
                     <div className="mt-8 flex justify-between">
                         <button
                             type="submit"

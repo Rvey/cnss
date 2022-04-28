@@ -4,7 +4,9 @@ import { useState } from 'react';
 
 const PatientTable = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const data : any = []
+    const data : any = [{
+        firstName: "asdasdad"
+    }]
     const [PatientId, setPatientId] = useState('');
     return (
         <div className="inline-block py-2 min-w-full ">

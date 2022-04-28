@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import ERoutes from "./routes/Routes";
-
+import {
+    QueryClient,
+    QueryClientProvider,
+} from 'react-query'
 function App() {
-  return (
-    <div className="">
-      <ERoutes />
-    </div>
-  );
+    const queryClient = new QueryClient()
+    return (
+        <div className="">
+            <QueryClientProvider client={queryClient}>
+                <ERoutes/>
+            </QueryClientProvider>
+        </div>
+    );
 }
 
 export default App;
