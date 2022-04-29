@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import axios from "axios";
 
-export const MutateData = (user, setIsOpen) => {
+export const MutateData = (user, setIsOpen , isOpen) => {
     const queryClient = useQueryClient();
 
     const addMutation = useMutation(
@@ -11,7 +11,7 @@ export const MutateData = (user, setIsOpen) => {
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(user);
-                setIsOpen(false);
+                setIsOpen(!isOpen);
             },
         }
     );

@@ -49,7 +49,11 @@ const PatientTable = () => {
                                     <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">{driver.email}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">{driver.phone}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">{driver.city}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">{driver.file}</td>
+                                    <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                        <a href={driver.file} download={"file"} className={"text-blue-400 bg-gray-500 p-2 bg-opacity-20 rounded-md"}>
+                                            Download file
+                                        </a>
+                                    </td>
                                     <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
                                         <button
                                             type="button"

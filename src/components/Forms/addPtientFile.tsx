@@ -44,11 +44,10 @@ const AddPatientFile = ({setIsOpen , isOpen }) => {
                     const prog = Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100)
                     setProgress(prog)
                 }, (err) => console.log(err), () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
                         values.file = url
-
-                        addMutation.mutate(values)
-// mutate data
+                    }).then(() => {
+                         addMutation.mutate(values)
                     })
                 })
             }}
