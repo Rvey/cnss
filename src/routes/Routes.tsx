@@ -9,14 +9,13 @@ import FileHistory from "../pages/FileHistory";
 
 export default function ERoutes() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-        <Route path="/" element={<Home/> } />
+        <Route path="/" element={<LoginAgent />} />
         <Route path="/LoginPatient" element={<LoginPatient />} />
-        <Route path="/LoginAgent" element={<LoginAgent />} />
         <Route path="/ManagePatient" element={<ManagePatient />} />
         <Route path="/History" element={<FileHistory />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
