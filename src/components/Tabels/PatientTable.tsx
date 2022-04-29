@@ -1,13 +1,20 @@
 import React, {useState} from 'react';
 import {FetchData} from "../../Hooks/query";
+import axios from "axios";
+import Modal from "../Modal/Modal";
 
 
 const PatientTable = () => {
     const [isOpen, setIsOpen] = useState(false);
     const {query} = FetchData("patient")
-    console.log(query)
-    const data = []
-    const [PatientId, setPatientId] = useState('');
+
+    const sendRefundPrice = (id) => {
+        setIsOpen(!isOpen);
+        console.log(id)
+        axios.post(`http://localhost:5000/patient/checkFile/${id}`).then(() => {
+            setIsOpen(!isOpen)
+        } )
+    }
     return (
         <div className="inline-block py-2 min-w-full ">
             {query.isLoading && <div>Loading ...</div>}
@@ -57,10 +64,7 @@ const PatientTable = () => {
                                     <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
                                         <button
                                             type="button"
-                                            onClick={() => {
-                                                setIsOpen(!isOpen);
-                                                setPatientId(driver._id);
-                                            }}
+                                            onClick={() => sendRefundPrice(driver._id)}
                                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                         >
                                             validate
@@ -72,6 +76,7 @@ const PatientTable = () => {
                     </tbody>
                 </table>
             </div>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} title={"Refund Price has been sent successfully"}  component={""}/>
         </div>
     );
 };
