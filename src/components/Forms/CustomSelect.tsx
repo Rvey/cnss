@@ -1,6 +1,7 @@
-import { FieldProps } from 'formik';
-import React from 'react';
-import Select from 'react-select';
+import {FieldProps} from "formik";
+import React from "react";
+import Select from "react-select";
+
 
 interface Option {
     label: string;
@@ -14,21 +15,30 @@ interface CustomSelectProps extends FieldProps {
     placeholder?: string;
 }
 
-export const CustomSelect = ({ className, placeholder, field, form, options, isMulti = false }: CustomSelectProps) => {
+export const CustomSelect = ({
+                                 className,
+                                 placeholder,
+                                 field,
+                                 form,
+                                 options,
+                                 isMulti = false
+                             }: CustomSelectProps) => {
     const onChange = (option: any) => {
         form.setFieldValue(
             field.name,
-            isMulti ? (option as Option[]).map((item: Option) => item.value) : (option as Option).value
+            isMulti
+                ? (option as Option[]).map((item: Option) => item.value)
+                : (option as Option).value
         );
     };
 
     const getValue = () => {
         if (options) {
             return isMulti
-                ? options.filter((option: { value: any }) => field.value.indexOf(option.value) >= 0)
-                : options.find((option: { value: any }) => option.value === field.value);
+                ? options.filter((option: { value: any; }) => field.value.indexOf(option.value) >= 0)
+                : options.find((option: { value: any; }) => option.value === field.value);
         } else {
-            return isMulti ? [] : ('' as any);
+            return isMulti ? [] : ("" as any);
         }
     };
 

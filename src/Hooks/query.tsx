@@ -39,7 +39,7 @@ export const LoginMutation = ({user, url}: any) => {
 
 export const FetchData = (user: any) => {
     const query = useQuery(`${user}`, async () => {
-        const {data} = await axios.get(`http://localhost:4000/api/${user}`);
+        const {data} = await axios.get(`http://localhost:5000/${user}/all`);
         return data;
     });
     return {query};

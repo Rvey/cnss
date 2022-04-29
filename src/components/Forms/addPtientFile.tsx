@@ -1,34 +1,21 @@
 import {Field, Form, Formik} from 'formik';
-import React from 'react';
+import React, {useState} from 'react';
 
 import {useNavigate} from 'react-router-dom';
 import CustomSelect from './CustomSelect';
-
+import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
+import {storage} from "../../lib/firebase";
+// @ts-ignore
+import {FilePond, File, registerPlugin} from "react-filepond";
+import "filepond/dist/filepond.min.css";
+import {FetchData} from "../../Hooks/query";
 const AddPatientFile = (setIsOpen: any) => {
     let navigate = useNavigate();
+    const [progress, setProgress] = useState<number>(0);
+    const [files, setFiles] = useState<File[]>([]);
+    const { query } = FetchData("cnam")
 
-    const languageOptions = [
-        {
-            label: "Chinese",
-            value: "zh-CN"
-        },
-        {
-            label: "English (US)",
-            value: "en-US"
-        },
-        {
-            label: "English (GB)",
-            value: "en-GB"
-        },
-        {
-            label: "French",
-            value: "fr-FR"
-        },
-        {
-            label: "Spanish",
-            value: "es-ES"
-        }
-    ];
+    // @ts-ignore
     // @ts-ignore
     // @ts-ignore
     return (
@@ -43,7 +30,6 @@ const AddPatientFile = (setIsOpen: any) => {
                 medicine: [],
                 email: '',
                 file: '',
-                multiLanguages: []
             }}
             onSubmit={(values: any) => {
                 // let data = new FormData();
@@ -54,8 +40,19 @@ const AddPatientFile = (setIsOpen: any) => {
                 // data.append('email', values.email);
                 // data.append('file', values.file);
                 // @ts-ignore
-                console.log(values)
+                const storageRef = ref(storage, `/file/${files[0].file.name}`)
+                const uploadTask = uploadBytesResumable(storageRef, files[0].file)
 
+                uploadTask.on("state_changed", (snapshot) => {
+                    const prog = Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 100)
+                    setProgress(prog)
+                }, (err) => console.log(err), () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        values.file = url
+                        console.log(values)
+// mutate data
+                    })
+                })
             }}
         >
             {({errors, touched, setFieldValue, values}: any) => (
@@ -65,6 +62,8 @@ const AddPatientFile = (setIsOpen: any) => {
                             {error} <button onClick={() => setError('')}>X</button>
                         </div>
                     )} */}
+
+
 
                     <div className="mt-4">
                         <label htmlFor="firstName"
@@ -119,21 +118,17 @@ const AddPatientFile = (setIsOpen: any) => {
                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                             medicine
                         </label>
-                        {/*<Field*/}
-                        {/*    type="text"*/}
-                        {/*    id="medicine"*/}
-                        {/*    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"*/}
-                        {/*    name="medicine"*/}
-                        {/*/>*/}
+                        {query &&
 
                         <Field
                             className="custom-select"
-                            name="multiLanguages"
-                            options={languageOptions}
+                            name="medicine"
+                            options={query.data}
                             component={CustomSelect}
                             placeholder="Select Medicine"
                             isMulti={true}
                         />
+                        }
                     </div>
                     <div className="mt-4">
                         <label htmlFor="email"
@@ -153,14 +148,14 @@ const AddPatientFile = (setIsOpen: any) => {
                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                             Upload patient file
                         </label>
-                        <input
-                            className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            id="file"
-                            name="file"
-                            type="file"
-                            onChange={(e) => {
-                                e.target.files && setFieldValue('file', e.target.files[0]);
-                            }}
+                        <FilePond
+                            // @ts-ignore
+                            files={files}
+                            onupdatefiles={setFiles}
+                            // allowMultiple={true}
+                            // maxFiles={3}
+                            name="productImage"
+                            labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                         />
                     </div>
 
@@ -169,7 +164,7 @@ const AddPatientFile = (setIsOpen: any) => {
                             type="submit"
                             className="w-[12em] text-green-900 bg-white border border-green-300 hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-500 dark:text-white dark:border-green-600 dark:hover:bg-green-700 dark:hover:border-gray-700 dark:focus:ring-green-800"
                         >
-                            add Patient File
+                            <span className="font-medium">{progress == 0 || progress == 100 ? 'Add Patient File' : 'Submitting ...' }</span>
                         </button>
                     </div>
                 </Form>
