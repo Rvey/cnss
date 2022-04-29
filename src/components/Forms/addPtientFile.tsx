@@ -6,15 +6,16 @@ import CustomSelect from './CustomSelect';
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import {storage} from "../../lib/firebase";
 // @ts-ignore
-import {FilePond, File, registerPlugin} from "react-filepond";
+import {File, FilePond, registerPlugin} from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import {FetchData, MutateData} from "../../Hooks/query";
-const AddPatientFile = ({setIsOpen , isOpen }) => {
+
+const AddPatientFile = ({setIsOpen, isOpen}) => {
     let navigate = useNavigate();
     const [progress, setProgress] = useState<number>(0);
     const [files, setFiles] = useState<File[]>([]);
-    const { query } = FetchData("cnam")
-    const {addMutation} = MutateData("patient", setIsOpen , isOpen )
+    const {query} = FetchData("cnam")
+    const {addMutation} = MutateData("patient", setIsOpen, isOpen)
     return (
         <Formik
             initialValues={{
@@ -29,13 +30,6 @@ const AddPatientFile = ({setIsOpen , isOpen }) => {
                 file: '',
             }}
             onSubmit={(values: any) => {
-                // let data = new FormData();
-                // data.append('firstName', values.firstName);
-                // data.append('lastName', values.lastName);
-                // data.append('password', values.password);
-                // data.append('medicine', values.medicine);
-                // data.append('email', values.email);
-                // data.append('file', values.file);
                 // @ts-ignore
                 const storageRef = ref(storage, `/file/${files[0].file.name}`)
                 const uploadTask = uploadBytesResumable(storageRef, files[0].file)
@@ -47,21 +41,13 @@ const AddPatientFile = ({setIsOpen , isOpen }) => {
                     getDownloadURL(uploadTask.snapshot.ref).then(async (url) => {
                         values.file = url
                     }).then(() => {
-                         addMutation.mutate(values)
+                        addMutation.mutate(values)
                     })
                 })
             }}
         >
             {({errors, touched, setFieldValue, values}: any) => (
                 <Form>
-                    {/* {error && (
-                        <div className="py-2 px-3 bg-red-500 w-full text-white rounded-md flex justify-between">
-                            {error} <button onClick={() => setError('')}>X</button>
-                        </div>
-                    )} */}
-
-
-
                     <div className="mt-4">
                         <label htmlFor="firstName"
                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -117,14 +103,14 @@ const AddPatientFile = ({setIsOpen , isOpen }) => {
                         </label>
                         {query &&
 
-                        <Field
-                            className="custom-select"
-                            name="medicine"
-                            options={query.data}
-                            component={CustomSelect}
-                            placeholder="Select Medicine"
-                            isMulti={true}
-                        />
+                            <Field
+                                className="custom-select"
+                                name="medicine"
+                                options={query.data}
+                                component={CustomSelect}
+                                placeholder="Select Medicine"
+                                isMulti={true}
+                            />
                         }
                     </div>
                     <div className="mt-4">
@@ -149,20 +135,19 @@ const AddPatientFile = ({setIsOpen , isOpen }) => {
                             // @ts-ignore
                             files={files}
                             onupdatefiles={setFiles}
-                            // allowMultiple={true}
-                            // maxFiles={3}
                             name="productImage"
                             labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                         />
                     </div>
-                        <div className={`h-2 ${progress == 0 ? "w-0" : `w-[${progress}%]`} bg-blue-300 rounded-md`}></div>
+                    <div className={`h-2 ${progress == 0 ? "w-0" : `w-[${progress}%]`} bg-blue-300 rounded-md`}></div>
 
                     <div className="mt-8 flex justify-between">
                         <button
                             type="submit"
                             className="w-[12em] text-green-900 bg-white border border-green-300 hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-500 dark:text-white dark:border-green-600 dark:hover:bg-green-700 dark:hover:border-gray-700 dark:focus:ring-green-800"
                         >
-                            <span className="font-medium">{progress == 0 || progress == 100 ? 'Add Patient File' : 'Submitting ...' }</span>
+                            <span
+                                className="font-medium">{progress == 0 || progress == 100 ? 'Add Patient File' : 'Submitting ...'}</span>
                         </button>
                     </div>
                 </Form>

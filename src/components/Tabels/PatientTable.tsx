@@ -13,7 +13,7 @@ const PatientTable = () => {
         console.log(id)
         axios.post(`http://localhost:5000/patient/checkFile/${id}`).then(() => {
             setIsOpen(!isOpen)
-        } )
+        })
     }
     return (
         <div className="inline-block py-2 min-w-full ">
@@ -51,24 +51,39 @@ const PatientTable = () => {
                     {query && query.data?.map(
                         (driver: any) =>
                             (
-                                <tr key={driver._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <tr key={driver._id}
+                                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">{driver.firstName} {driver.lastName} </td>
                                     <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">{driver.email}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">{driver.phone}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">{driver.city}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                                        <a href={driver.file} download={"file"} className={"text-blue-400 bg-gray-500 p-2 bg-opacity-20 rounded-md"}>
+                                        <a href={driver.file} download={"file"}
+                                           className={"text-blue-400 bg-gray-500 p-2 bg-opacity-20 rounded-md"}>
                                             Download file
                                         </a>
                                     </td>
                                     <td className="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                        <button
-                                            type="button"
-                                            onClick={() => sendRefundPrice(driver._id)}
-                                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                        >
-                                            validate
-                                        </button>
+                                        {
+                                            driver.status == 'pending' ?
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => sendRefundPrice(driver._id)}
+                                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                >
+                                                    validate
+                                                </button>
+                                                :
+                                                <button
+                                                    type="button"
+                                                    onClick={() => sendRefundPrice(driver._id)}
+                                                    className="text-white bg-gray-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                                                    disabled
+                                                >
+                                                    validated
+                                                </button>
+                                        }
                                     </td>
                                 </tr>
                             )
@@ -76,7 +91,8 @@ const PatientTable = () => {
                     </tbody>
                 </table>
             </div>
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} title={"Refund Price has been sent successfully"}  component={""}/>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} title={"Refund Price has been sent successfully"}
+                   component={""}/>
         </div>
     );
 };
