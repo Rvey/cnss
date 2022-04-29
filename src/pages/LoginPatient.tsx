@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import {LoginMutation} from "../Hooks/query";
 
 function LoginPatient() {
   const navigate = useNavigate();
-  const [matriculations, setMatriculationValue] = useState("");
+  const [immatriculation, setMatriculationValue] = useState("");
   const [password, setPasswordValue] = useState("");
-  const handleLogin = () => {
-      console.log(matriculations , password)
-
+  const {loginMutation} = LoginMutation("patient", "History")
+  const handleLogin = (e) => {
+    e.preventDefault()
+    // @ts-ignore
+    loginMutation.mutate({
+      immatriculation,
+      password
+    })
   };
   return (
     <div className="h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-ehe-100">
@@ -26,7 +32,7 @@ function LoginPatient() {
               <input
                 id="email-address"
                 type="text"
-                value={matriculations}
+                value={immatriculation}
                 autoComplete="email"
                 required
                 className={`appearance-none  relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm `}
@@ -59,7 +65,7 @@ function LoginPatient() {
           <div className="space-y-3">
             <button
               type="submit"
-              onClick={handleLogin}
+              onClick={(e) => handleLogin(e)}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Login

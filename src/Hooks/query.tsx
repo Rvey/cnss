@@ -19,10 +19,9 @@ export const MutateData = (user, setIsOpen , isOpen) => {
     return {addMutation};
 };
 
-export const LoginMutation = ({user, url}: any) => {
+export const LoginMutation = (user, url) => {
     const navigate = useNavigate();
     const [error, setError] = useState("");
-
     const loginMutation = useMutation(
         (values) => axios.post(`http://localhost:5000/${user}/login`, values),
         {
