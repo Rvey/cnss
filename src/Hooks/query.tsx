@@ -3,15 +3,15 @@ import {useNavigate} from "react-router-dom";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import axios from "axios";
 
-export const MutateData = ({user, setIsOpen, isOpen}: any) => {
+export const MutateData = (user, setIsOpen) => {
     const queryClient = useQueryClient();
 
     const addMutation = useMutation(
-        (values) => axios.post(`http://localhost:4000/api/${user}/store`, values),
+        (values) => axios.post(`http://localhost:5000/${user}/create`, values),
         {
             onSuccess: () => {
                 queryClient.invalidateQueries(user);
-                setIsOpen(!isOpen);
+                setIsOpen(false);
             },
         }
     );
@@ -24,7 +24,7 @@ export const LoginMutation = ({user, url}: any) => {
     const [error, setError] = useState("");
 
     const loginMutation = useMutation(
-        (values) => axios.post(`http://localhost:4000/api/${user}/login`, values),
+        (values) => axios.post(`http://localhost:5000/${user}/login`, values),
         {
             onSuccess: async (data) => {
                 navigate(`/${url}`);

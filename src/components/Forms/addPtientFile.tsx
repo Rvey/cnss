@@ -8,16 +8,13 @@ import {storage} from "../../lib/firebase";
 // @ts-ignore
 import {FilePond, File, registerPlugin} from "react-filepond";
 import "filepond/dist/filepond.min.css";
-import {FetchData} from "../../Hooks/query";
-const AddPatientFile = (setIsOpen: any) => {
+import {FetchData, MutateData} from "../../Hooks/query";
+const AddPatientFile = ({setIsOpen , isOpen }) => {
     let navigate = useNavigate();
     const [progress, setProgress] = useState<number>(0);
     const [files, setFiles] = useState<File[]>([]);
     const { query } = FetchData("cnam")
-
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
+    const {addMutation} = MutateData("patient", setIsOpen , isOpen )
     return (
         <Formik
             initialValues={{
@@ -49,7 +46,8 @@ const AddPatientFile = (setIsOpen: any) => {
                 }, (err) => console.log(err), () => {
                     getDownloadURL(uploadTask.snapshot.ref).then((url) => {
                         values.file = url
-                        console.log(values)
+
+                        addMutation.mutate(values)
 // mutate data
                     })
                 })
@@ -158,6 +156,7 @@ const AddPatientFile = (setIsOpen: any) => {
                             labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                         />
                     </div>
+                        <div className={`h-2 ${progress == 0 ? "w-0" : `w-[${progress}%]`} bg-blue-300 rounded-md`}></div>
 
                     <div className="mt-8 flex justify-between">
                         <button

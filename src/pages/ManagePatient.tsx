@@ -22,7 +22,7 @@ const ManageDeliveries: React.FC<ManagerDeliveriesProps> = () => {
                 </button>
             </div>
             <PatientTable />
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} component={<AddPatientFile setIsOpen={setIsOpen} />} title={'Add Patient'} />
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} component={<AddPatientFile setIsOpen={setIsOpen} isOpen={isOpen} />} title={'Add Patient'} />
         </div>
     );
 };
